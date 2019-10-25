@@ -46,9 +46,9 @@ class CDLL:
     def append(self, time: str, tweet: str):
         """
         Takes the time and the tweet,
-        Appends them to our list
+        Appends them to our list at current
         If our list is empty, adds them at 'head'
-        Otherwise, adds the node at 'head.prev'
+        Otherwise, adds the node at 'current.next'
         """
         # if empty list
         if self.head == None:
@@ -60,12 +60,14 @@ class CDLL:
         else:
             # make a new node
             nnode = CDLLNode(time, tweet)
-            # point tail to this node, and back
-            self.head.prev_node.next_node = nnode
-            nnode.prev_node = self.head.prev_node
-            # point head to this node, and back
-            self.head.prev_node = nnode
-            nnode.next_node = self.head
+            # point node past current to this node, and back
+            self.current.next_node.prev_node = nnode
+            nnode.next_node = self.current.next_node
+            # point current to this node, and back
+            self.current.next_node = nnode
+            nnode.prev_node = self.current
+            # set current to the newly created node
+            self.current = nnode
 
         # increase the number of nodes we have
         self.numnodes += 1
@@ -73,13 +75,12 @@ class CDLL:
     def prepend(self, time: str, tweet: str):
         """
         What is a prepend in a CDLL,
-        If not an append where we point 'head' to it?
+        If not an append at a different point?
         """
         # Because circular doubly linked,
-        # Just append, and point head at new node
+        # Back up one node, then append
+        self.go_prev()
         self.append(time,tweet)
-        self.head = self.head.prev_node
-        self.current = self.head
 
     def go_next(self):
         """
@@ -126,21 +127,41 @@ class CDLL:
         print(self.current.time)
         print(self.current.tweet)
 
-def myParser(sentence: str, LList: CDLL)->None:
+    def time_check(self, time: str)->bool:
+        # check the time of the current node
+        # against the passed time
+        # x iterates through Hours, Minutes, Seconds
+        for x in range(3):
+            # If the current x is less than the passed one
+            if int(self.current.time[3*x:(3*x)+2]) < int(time[3*x:(3*x)+2]):
+                # append the tweet
+                return True
+            # If current x is more than the passed one
+            elif int(self.current.time[3*x:(3*x)+2]) > int(time[3*x:(3*x)+2]):
+                # Prepend the tweet
+                return False
+            # arbitrarily append if all values equal
+            elif x == 2:
+                return True
+            # if current x is equal, try next x
+            else:
+                continue
+
+def myParser(sentence: str)->tuple:
     """
     Takes a sentence to parse,
     and a list to prepend the parsed sentence to
     """
     # splits into 3 parts, based on '|'
     parse = sentence.split('|')
-    # the first part is the time
-    ttime = parse[1].strip()
-    # out of the second part, split at the "http"
-    parse = parse[2].split("http")
-    # this becomes the data (tweet)
-    tdata = parse[0].strip()
+    # the third section becomes the tweet
+    tdata = parse[2]
+    # split the time/date substring based on spaces
+    parse = parse[1].split(' ')
+    # the fourth part is the time
+    ttime = parse[3]
     # append these into our Linked List
-    LList.prepend(ttime, tdata)
+    return (ttime, tdata)
 
 def userinloop(LList: CDLL)->None:
     """
@@ -244,8 +265,13 @@ def main():
     # having tweetdata as a variable, parse it
     # and add it to the linked list
     for x in tweetdata:
-        myParser(x,TweetLL)
-    
+        # parse for the time and tweet
+        time, tweet = myParser(x)
+        # traverse the list; if 
+        for y in range(TweetLL.numnodes):
+            
+        else:
+
     # print the head tweet
     TweetLL.print_current()
 

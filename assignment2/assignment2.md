@@ -66,7 +66,7 @@ class CDLL:
 
 ## Using your class in a Tweet Reader application
 
-You will develop a program that will open and read the contents of an input test file. The file name will be provided **as a command line argument**. This means that your code will need a `main()` function. Each test file is a text file containing tweets of a news agency. For example, `bbchealth.txt` is related to BBC health news. Each line contains tweets following the format: `tweet id|date` and `time|tweet`. You can assume the separator between fields on each line is always `'|'`. 
+You will develop a program that will open and read the contents of an input test file. The file name will be provided **as a command line argument**. This means that your code will need a `main()` function. <br>Each test file is a text file containing tweets of a news agency. For example, `bbchealth.txt` is related to BBC health news. Each line contains tweets following the format: `tweet id|date` and `time|tweet`. You can assume the separator between fields on each line is always `'|'`. 
 
 Here is an example tweet from the dataset:
 ```
@@ -75,7 +75,7 @@ Here is an example tweet from the dataset:
 From this, the `time` will only be this section: `16:02:39` (It's in military time)<br>
 Additionally, the `tweet` would only be this section: `American #Ebola patient Dr. Rick Sacra has been released from the hospital`
 
-All test files were downloaded from the [Health News in Twitter Data Set](https://archive.ics.uci.edu/ml/machine-learning-databases/00438/, "Data Set") (we encourage you to check this dataset for personal testing).
+All test files were downloaded from the [Health News in Twitter Data Set](https://archive.ics.uci.edu/ml/machine-learning-databases/00438/, "Data Set") (we encourage you to use the dataset for personal testing).
 
 While reading the contents of the input file line-by-line, your program will be inserting each tweet into a circular doubly linked list. After reading all tweets, your program will print to the `stdout` the oldest tweet and then enter a loop waiting for user commands. The user can interact with your program using one of the following commands:
 
@@ -87,6 +87,41 @@ While reading the contents of the input file line-by-line, your program will be 
 * `s <word>`: searches for the next occurrence of the substring word in the following tweets (search is case insensitive and performs a circular traversal in the list)
 * `q`: quits the program
 
+## Point Distribution
+
+The sections below show the distribution of points for the assignment:
+
+|**Linked List Methods** |**30 Points Total**|
+|      ---      |       ---         |
+|append()       |     5 points      |
+|prepend()      |     5 points      |
+|go_next()      |     3 points      |
+|go_prev()      |     3 points      |
+|go_first()     |     3 points      |
+|go_last()      |     3 points      |
+|skip()         |     5 points      |
+|print_current()|     3 points      |
+
+<br>
+
+|**Tweet Reader Input Functionality**                       |**50 Points Total**|
+|      ---                                                  |       ---         |
+|`n`    (go to the next tweet)                              |     6 points      |
+|`p`    (go to the previous tweet)                          |     6 points      |
+|`f`    (go to the first tweet)                             |     6 points      |
+|`l`    (go to the last tweet)                              |     6 points      |
+|`<number>` (go to the tweet `<number>` tweets away)        |     10 points     |
+|`s <word>` (search for a word from the tweets in your list)|     14 points     |
+|`q` (quit the program)                                     |     2 points      |
+
+<br>
+
+|**Additional Tests**                                       |**20 Points Total**|
+|      ---                                                  |       ---         |
+|Test for all the tweets being read into your linked list   |     6 points      |
+|Test for your tweets being in chronological order          |     7 points      |
+|Test for two random tweets to be where they should be      |     7 points      |
+
 ## SUBMISSION
 
 You will submit ONE file called `assignment2.py` to Gradescope for this lab.
@@ -97,16 +132,11 @@ Please provide meaningful comments and use proper coding style and indentation. 
 
 Your program will be automatically graded. For each of the questions you either pass the test cases (full points) or not (zero points).
 
-The section below shoes the distribution of points for each section:
-
-* **Linked List Methods:** 50 points
-* **Tweet Reader Methods:** 50 points
-
 Students caught cheating or plagiarizing will receive no credit. Additional actions, including a failing grade in the class or referring the case for disciplinary action, may also be taken.
 
 Late submissions will receive a ZERO.
 
 
-## **Your Gradescope submissions will not show how many points you have until after the due date has passed. It is on you to follow the requirements for each section, and to come up with your own thorough test cases that make sure that each part is complete and correct.**
+## **Your Gradescope submissions will not show how many points you have until after the due date has passed. It is on you to follow the requirements for each section, and to come up with your own thorough test cases that make sure that each part is complete and correct. You are allowed unlimited resubmissions until the due date.**
 
 **NOTE: Gradescope allows me to compare all submissions with each other and see how similar they are. If I find submissions which are too similar to each others, all the similar looking assignments will receive a ZERO. Disciplinary action might be taken depending upon the severity of the issue.**
