@@ -178,6 +178,7 @@ def populateList(LList: CDLL, filedat):
         # traverse the list, insert if you find a place
         for y in range(LList.numnodes):
             toInsert = LList.time_check(time)
+            print(toInsert)
             if toInsert:
                 LList.insert(time, tweet)
                 break
