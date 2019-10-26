@@ -50,8 +50,7 @@ class CDLL:
         self.numnodes: int = 0
 
     def insert(self, time: str, tweet: str):
-        """
-        Takes the time and the tweet,
+        """Takes the time and the tweet,
 
         Creates a node to insert into our list at current
 
@@ -130,11 +129,10 @@ class CDLL:
         print(self.current.tweet)
 
     def time_check(self, time: str)->bool:
-        # check the time of the current node
-        # against the passed time
-        # x iterates through Hours, Minutes, Seconds
+        """Compare the time of the current node against the passed time"""
         if self.head == None:
             return True
+        # x iterates through Hours, Minutes, Seconds
         for x in range(3):
             # If current x is more than the passed one
             if int(self.current.time[3*x:(3*x)+2]) > int(time[3*x:(3*x)+2]):
@@ -178,7 +176,6 @@ def populateList(LList: CDLL, filedat):
         # traverse the list, insert if you find a place
         for y in range(LList.numnodes):
             toInsert = LList.time_check(time)
-            print(toInsert)
             if toInsert:
                 LList.insert(time, tweet)
                 break
@@ -186,7 +183,6 @@ def populateList(LList: CDLL, filedat):
                 LList.go_next
         # if you go through the entire list, insert it as the tail
         else:
-            LList.go_first
             LList.insert(time,tweet)
 
 def userinloop(LList: CDLL)->None:
