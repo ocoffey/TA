@@ -11,13 +11,15 @@ class CDLLNode:
     def __init__(self, time = "", tweet = "", next_node = None, prev_node = None):
         """
         Constructor
+
         Default values set to none
+
         If the user passes a value to the constructor, it's set
         """
-        self.time = time
-        self.tweet = tweet
-        self.next_node = next_node
-        self.prev_node = prev_node
+        self.time: str = time
+        self.tweet: str = tweet
+        self.next_node: CDLLNode = next_node
+        self.prev_node: CDLLNode = prev_node
     """
     # destructor
     def __del__(self):
@@ -30,28 +32,35 @@ class CDLLNode:
 class CDLL:
     """
     Circular Doubly Linked List
+
     Each node points to the next and previous nodes
+
     The head and tail point to each other
     """
     def __init__(self):
         """
         Constructor
+
         Sets 'head' and 'current' to none
+
         Sets the number of nodes to 0
         """
-        self.head = None
-        self.current = None
-        self.numnodes = 0
+        self.head: CDLLNode = None
+        self.current: CDLLNode = None
+        self.numnodes: int = 0
 
-    def append(self, time: str, tweet: str):
+    def insert(self, time: str, tweet: str):
         """
         Takes the time and the tweet,
-        Appends them to our list at current
-        If our list is empty, adds them at 'head'
-        Otherwise, adds the node at 'current.next'
+
+        Creates a node to insert into our list at current
+
+        If our list is empty, adds the node at 'head'
+
+        Otherwise, adds the node at 'current.prev'
         """
         # if empty list
-        if self.head == None:
+        if not self.head:
             # make a new node, and point head and current to it
             self.head = self.current = CDLLNode(time, tweet)
             # make the next and prev values the node itself
@@ -60,27 +69,20 @@ class CDLL:
         else:
             # make a new node
             nnode = CDLLNode(time, tweet)
-            # point node past current to this node, and back
-            self.current.next_node.prev_node = nnode
-            nnode.next_node = self.current.next_node
+            # point node before current to this node, and back
+            nnode.prev_node = self.current.prev_node
+            self.current.prev_node.next_node = nnode
             # point current to this node, and back
-            self.current.next_node = nnode
-            nnode.prev_node = self.current
+            nnode.next_node = self.current
+            self.current.prev_node = nnode
+            # check for if we were making this the new 'head'
+            if self.current == self.head:
+                self.head = nnode
             # set current to the newly created node
             self.current = nnode
 
         # increase the number of nodes we have
         self.numnodes += 1
-
-    def prepend(self, time: str, tweet: str):
-        """
-        What is a prepend in a CDLL,
-        If not an append at a different point?
-        """
-        # Because circular doubly linked,
-        # Back up one node, then append
-        self.go_prev()
-        self.append(time,tweet)
 
     def go_next(self):
         """
@@ -131,16 +133,18 @@ class CDLL:
         # check the time of the current node
         # against the passed time
         # x iterates through Hours, Minutes, Seconds
+        if self.head == None:
+            return True
         for x in range(3):
-            # If the current x is less than the passed one
-            if int(self.current.time[3*x:(3*x)+2]) < int(time[3*x:(3*x)+2]):
-                # append the tweet
-                return True
             # If current x is more than the passed one
-            elif int(self.current.time[3*x:(3*x)+2]) > int(time[3*x:(3*x)+2]):
+            if int(self.current.time[3*x:(3*x)+2]) > int(time[3*x:(3*x)+2]):
                 # Prepend the tweet
+                return True
+            # If the current x is less than the passed one
+            elif int(self.current.time[3*x:(3*x)+2]) < int(time[3*x:(3*x)+2]):
+                # leave, check the next tweet
                 return False
-            # arbitrarily append if all values equal
+            # arbitrarily prepend if all values equal
             elif x == 2:
                 return True
             # if current x is equal, try next x
@@ -149,8 +153,8 @@ class CDLL:
 
 def myParser(sentence: str)->tuple:
     """
-    Takes a sentence to parse,
-    and a list to prepend the parsed sentence to
+    Takes a sentence to parse, 
+    returns the parsed elements in a tuple as (time, tweet)
     """
     # splits into 3 parts, based on '|'
     parse = sentence.split('|')
@@ -163,16 +167,44 @@ def myParser(sentence: str)->tuple:
     # append these into our Linked List
     return (ttime, tdata)
 
+def populateList(LList: CDLL, filedat):
+    # having tweetdata as a variable, parse it
+    # and add it to the linked list
+    for x in filedat:
+        # parse for the time and tweet
+        time, tweet = myParser(x)
+        # set list to head
+        LList.go_first()
+        # traverse the list, insert if you find a place
+        for y in range(LList.numnodes):
+            toInsert = LList.time_check(time)
+            if toInsert:
+                LList.insert(time, tweet)
+                break
+            else:
+                LList.go_next
+        # if you go through the entire list, insert it as the tail
+        else:
+            LList.go_first
+            LList.insert(time,tweet)
+
 def userinloop(LList: CDLL)->None:
-    """
-    Event Loop
+    """Event Loop
+
     Input:
+
     `n`: prints the next tweet (chronologically) to the stdout
+
     `p`: prints the previous tweet (chronologically) to the stdout
+
     `f`: prints the first tweet (oldest) to the stdout
+
     `l`: prints the last tweet (most recent) to the stdout
+
     `<number>`: skips tweets circularly and prints the current to the stdout
+
     `s <word>`: searches for the next occurrence of the substring word in the following tweets (search is case insensitive and performs a circular traversal in the list)
+
     `q`: quits the program
     """
     # get the users command, and enter a loop with it
@@ -262,15 +294,8 @@ def main():
 
     # make linked list
     TweetLL = CDLL()
-    # having tweetdata as a variable, parse it
-    # and add it to the linked list
-    for x in tweetdata:
-        # parse for the time and tweet
-        time, tweet = myParser(x)
-        # traverse the list; if 
-        for y in range(TweetLL.numnodes):
-            
-        else:
+    # populate the Linked List with the tweet data
+    populateList(TweetLL, tweetdata)
 
     # print the head tweet
     TweetLL.print_current()
@@ -367,8 +392,6 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(studout.getvalue(),"This Is\nThe Test\n")
         sys.stdout = origout
 
-"""
 if __name__ == "__main__":
-    unittest.main()
-    #main()
-"""
+    #unittest.main()
+    main()
