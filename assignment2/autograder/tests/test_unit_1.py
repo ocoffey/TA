@@ -5,9 +5,7 @@ import io
 import sys
 
 class TestLinkedList(unittest.TestCase):
-    """
-    30 Points
-    """
+    """Testing CDLL - 30 points"""
     @weight(5)
     def test_eval_prepend(self):
         llpre = CDLL()

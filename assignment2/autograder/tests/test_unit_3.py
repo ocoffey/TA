@@ -3,7 +3,10 @@ from gradescope_utils.autograder_utils.decorators import weight
 import subprocess
 import sys
 
-class TestTweetReader(unittest.TestCase):
+class TestAdditional(unittest.TestCase):
+    """Additional Tests - 30 points"""
+
+
     """
     30 Points
     n - prints next tweet - 4

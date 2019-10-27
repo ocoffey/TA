@@ -2,7 +2,11 @@ import unittest
 from gradescope_utils.autograder_utils.decorators import weight
 from assignment1 import alt_bubblesort, switch_bubblesort
 
-class TestLinkedListBest(unittest.TestCase):
+
+
+class TestTweetReader(unittest.TestCase):
+    """Test Tweet Reader - 50 points"""
+
     """
     20 Points
     Skip in small time
