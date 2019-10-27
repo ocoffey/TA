@@ -1,25 +1,59 @@
 import unittest
 from gradescope_utils.autograder_utils.decorators import weight
-from assignment1 import alt_bubblesort, switch_bubblesort
-
-
+import os
+import re
+import subprocess
 
 class TestTweetReader(unittest.TestCase):
     """Test Tweet Reader - 50 points"""
 
-    """
-    20 Points
-    Skip in small time
-    ?????Skip in smaller time?? (go_next or go_prev based on numnodes/2,
-    and how big n % numnodes is)?????
-    Go Last in constant time
-    Append in constant time
-    """
+    def setUp(self):
+        self.test = 'tests/KaiserHealthNews.txt'
+        self.testpy = 'tests/testassignment2.py'
 
-    """
-    Used for templating
+    def test_process(self, stinput: str) -> bool:
+        """Function call to actually run the test"""
+        # runs the students file, passing a .txt file
+        studp = subprocess.run(['python3', 'assignment2.py', self.test], stdout=subprocess.PIPE, input=stinput, encoding='ascii')
+        # runs our file, passing the same .txt file
+        testp = subprocess.run(['python3', self.testpy, self.test], stdout=subprocess.PIPE, input=stinput, encoding='ascii')
+        # strips students stdout of all whitespace
+        studstripped = re.sub(r"([\s\t\n])", r"", studp.stdout.strip())
+        # strips our stdout of all whitespace
+        teststripped = re.sub(r"([\s\t\n])", r"", testp.stdout.strip())
+        # compares outputs and returns that bool
+        return studstripped == teststripped
+
+    @weight(2)
+    def test_quit(self):
+        testq = subprocess.run(['python3', 'assignment2.py', self.test], stdout=subprocess.PIPE, input='q\n', encoding='ascii')
+        self.assertEqual(testq.returncode,0)
+        return
     
-    @weight(5)
-    def test_eval_altbubsorted(self):
-        self.assertEqual(alt_bubblesort([1, 2, 3, 4, 5, 6, 7, 8], 8), [1, 2, 3, 4, 5, 6, 7, 8])
-    """
+    @weight(4)
+    def test_next(self):
+        self.assertIs(self.test_process('n\nq\n'),True)
+
+    @weight(4)
+    def test_prev(self):
+        self.assertIs(self.test_process('p\nq\n'),True)
+
+    @weight(4)
+    def test_first(self):
+        self.assertIs(self.test_process('f\nq\n'),True)
+
+    @weight(4)
+    def test_last(self):
+        self.assertIs(self.test_process('l\nq\n'),True)
+
+    @weight(8)
+    def test_num(self):
+        self.assertIs(self.test_process('num\nq\n'),True)
+
+    @weight(10)
+    def test_skip(self):
+        self.assertIs(self.test_process('5000\nq\n'),True)
+
+    @weight(14)
+    def test_search(self):
+        self.assertIs(self.test_process('s cancer\nq\n'),True)

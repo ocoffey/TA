@@ -36,7 +36,7 @@ class CDLL:
  	def __init__(self):
         self.head: CDLLNode = None
         self.current: CDLLNode = None
-        self.numberofnodes: int = 0
+        self.numnodes: int = 0
 	...
     # makes an insertion based on 'current'
     def insert(self,time: str, tweet: str):
@@ -63,7 +63,14 @@ class CDLL:
 
 ## Using your class in a Tweet Reader application
 
-You will develop a program that will open and read the contents of an input test file. The file name will be provided **as a command line argument**. This means that your code will need a `main()` function. <br>Each test file is a text file containing tweets of a news agency. For example, `bbchealth.txt` is related to BBC health news. Each line contains tweets following the format: `tweet id|date` and `time|tweet`. You can assume the separator between fields on each line is always `'|'`.
+You will develop a program that will open and read the contents of an input test file. The file name will be provided **as a command line argument**. This means that your code will need a `main()` function. In addition to this, you need to use the method we've been using in labs for making sure that main runs, by including this code at the bottom of your file:
+
+```python
+if __name__ is "__main__":
+    main()
+```
+
+Each test file is a text file containing tweets of a news agency. For example, `bbchealth.txt` is related to BBC health news. Each line contains tweets following the format: `tweet id|date` and `time|tweet`. You can assume the separator between fields on each line is always `'|'`.
 
 Here is an example tweet from the dataset:
 
@@ -76,7 +83,10 @@ Additionally, the `tweet` would only be this section: `American #Ebola patient D
 
 All test files were downloaded from the [Health News in Twitter Data Set](https://archive.ics.uci.edu/ml/machine-learning-databases/00438/, "Data Set") (we encourage you to use the dataset for personal testing).
 
-While reading the contents of the input file line-by-line, your program will be inserting each tweet into a circular doubly linked list. After reading all tweets, your program will print to the `stdout` the oldest tweet and then enter a loop waiting for user commands. The user can interact with your program using one of the following commands:
+While reading the contents of the input file line-by-line, your program will be inserting each tweet into a circular doubly linked list in chronological order.
+>The first tweet should be closest to the time 00:00:00, and the last tweet should be closest to the time 23:59:59
+
+After reading all tweets, your program will print to the `stdout` the earliest tweet and then enter a loop waiting for user commands. The user can interact with your program using one of the following commands:
 
 * `n`: prints the next tweet (chronologically) to the stdout
 * `p`: prints the previous tweet (chronologically) to the stdout
@@ -86,6 +96,8 @@ While reading the contents of the input file line-by-line, your program will be 
 * `<number>`: skips tweets circularly and prints the current to the stdout
 * `s <word>`: searches for the next occurrence of the substring word in the following tweets (search is case insensitive and performs a circular traversal in the list)
 * `q`: quits the program
+
+>Do not print any words in your input call. Just use `input()`
 
 ## Point Distribution
 
@@ -118,9 +130,8 @@ The sections below show the distribution of points for the assignment:
 
 |**Additional Tests**                                       |**20 Points Total**|
 |      ---                                                  |       ---         |
-|Test for all the tweets being read into your linked list   |     6 points      |
-|Test for your tweets being in chronological order          |     7 points      |
-|Test for two random tweets to be where they should be      |     7 points      |
+|Test for your tweets being in chronological order          |     10 points      |
+|Test for two random tweets to be where they should be      |     10 points      |
 
 ## SUBMISSION
 

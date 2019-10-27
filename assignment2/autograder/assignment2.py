@@ -203,7 +203,7 @@ def userinloop(LList: CDLL)->None:
     `q`: quits the program
     """
     # get the users command, and enter a loop with it
-    usercom = input("Please enter a command: ")
+    usercom = input()
     # if user input is 'q', leave the event loop
     while usercom != 'q':
         # if 'n', print the next tweet
@@ -266,26 +266,15 @@ def userinloop(LList: CDLL)->None:
             except ValueError:
                 print("Please enter a valid command")
         # get new user input
-        usercom = input("Please enter a command: ")
+        usercom = input()
     
     # go back to main
     return
 
 def main():
-    # make sure the file is passed as a command line arg
-    try:
-        filename = sys.argv[1]
-    except IndexError:
-        print("Please include a filename as a command line argument")
-        return
-
     # make sure we can actually open the passed filename
-    try:
-        with open(filename) as f:
-            tweetdata = f.readlines()
-    except FileNotFoundError:
-        print("Couldn't open the file, please make sure it's within the directory")
-        return
+    with open(filename,'r') as f:
+        tweetdata = f.readlines()
 
     # make linked list
     TweetLL = CDLL()
@@ -304,94 +293,5 @@ def main():
     # done
     return
 
-class TestLinkedList(unittest.TestCase):
-    """
-    30 Points
-    """
-    """
-    def test_eval_prepend(self):
-        llpre = CDLL()
-        for i in range(3,0,-1):
-            llpre.prepend("",str(i))
-        sout = []
-        for i in range(3,0,-1):
-            sout.append(llpre.current.tweet)
-            llpre.go_next()
-        self.assertListEqual(sout,["1", "2", "3"])
-
-    def test_eval_append(self):
-        llapp = CDLL()
-        for i in range(0,10):
-            llapp.append(str(i),"")
-        sout = []
-        for i in range(0, 10):
-            sout.append(llapp.current.time)
-            llapp.go_next()
-        self.assertListEqual(sout,["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
-
-    def test_eval_go_next(self):
-        llgn = CDLL()
-        for i in range(2):
-            llgn.append("",str(i))
-        self.assertEqual(llgn.current.tweet, "0")
-        llgn.go_next()
-        self.assertEqual(llgn.current.tweet, "1")
-
-    def test_eval_go_prev(self):
-        llgp = CDLL()
-        for i in range(5):
-            llgp.prepend(str(i),"")
-        self.assertEqual(llgp.current.time, "4")
-        llgp.go_prev()
-        self.assertEqual(llgp.current.time, "0")
-
-    def test_eval_go_first(self):
-        llgf = CDLL()
-        for i in range(20):
-            llgf.append(str(i),"")
-        for i in range(10):
-            llgf.go_next()
-        self.assertEqual(llgf.current.time, "10")
-        llgf.go_first()
-        self.assertEqual(llgf.current.time, "0")
-
-    def test_eval_go_last(self):
-        llgl = CDLL()
-        for i in range(50):
-            llgl.prepend("",str(i))
-        for i in range(27):
-            llgl.go_prev()
-        self.assertEqual(llgl.current.tweet, "26")
-        llgl.go_last()
-        self.assertEqual(llgl.current.tweet, "0")
-
-    def test_eval_skip(self):
-        lls = CDLL()
-        for i in range(40):
-            if i%3 == 0:
-                lls.append("Hello","")
-            elif i%3 == 1:
-                lls.append("There","")
-            else:
-                lls.append("Again","")
-        self.assertEqual(lls.current.time, "Hello")
-        lls.skip(50)
-        self.assertEqual(lls.current.time, "There")
-
-    def test_eval_print_cur(self):
-        llpc = CDLL()
-        studout = io.StringIO()
-        origout = sys.stdout
-
-        llpc.append("This Is","The Test")
-
-        sys.stdout = studout
-        llpc.print_current()
-
-        self.assertEqual(studout.getvalue(),"This Is\nThe Test\n")
-        sys.stdout = origout
-    """
-
-if __name__ == "__main__":
-    #unittest.main()
+if __name__ is "__main__":
     main()
