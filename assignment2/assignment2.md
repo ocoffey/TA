@@ -20,29 +20,26 @@ I expect you to create a source file `assignment2.py` that will contain the solu
 
 ## Implementing a Circular Doubly Linked List
 
-You will design and implement a class for a customized Circular Doubly-Linked List named CDLL which contains at least the following public methods: `prepend`, `append`, `print_current`, `go_next`, `go_prev`, `go_first`, `go_last`, `skip` (refer to the comments below for more details). Each node in the list stores two strings, corresponding to the time and text of a Tweet. Your classes must be implemented in the `assignment2.py` file.
+You will design and implement a class for a customized Circular Doubly-Linked List named CDLL which contains at least the following public methods: `insert`, `print_current`, `go_next`, `go_prev`, `go_first`, `go_last`, `skip` (refer to the comments below for more details). Each node in the list stores two strings, corresponding to the time and text of a Tweet. Your classes must be implemented in the `assignment2.py` file.
 
 ```python
 class CDLLNode:
-    def __init__(self,time="",tweet="",next_node=None,prev_node=None):
-    self.time = time
-    self.tweet = tweet
-    self.next_node = next_node
-    self.prev_node = prev_node
+    def __init__(self, time="", tweet="", next_node=None, prev_node=None):
+    self.time: str = time
+    self.tweet: str = tweet
+    self.next_node: CDLLNode = next_node
+    self.prev_node: CDLLNode = prev_node
 ```
 
 ```python
 class CDLL:
  	def __init__(self):
-        self.head = None
-        self.current = None
-        self.numberofnodes = 0
+        self.head: CDLLNode = None
+        self.current: CDLLNode = None
+        self.numberofnodes: int = 0
 	...
-    # makes an insertion at the front of the list
-    def prepend(self,time:str, tweet:str):
-    
-    # makes an insertion at the end of the list
-    def append(self,time:str, tweet:str):
+    # makes an insertion based on 'current'
+    def insert(self,time: str, tweet: str):
     
     # moves 'current' pointer to the next node (circularly)
     def go_next(self):
@@ -66,12 +63,14 @@ class CDLL:
 
 ## Using your class in a Tweet Reader application
 
-You will develop a program that will open and read the contents of an input test file. The file name will be provided **as a command line argument**. This means that your code will need a `main()` function. <br>Each test file is a text file containing tweets of a news agency. For example, `bbchealth.txt` is related to BBC health news. Each line contains tweets following the format: `tweet id|date` and `time|tweet`. You can assume the separator between fields on each line is always `'|'`. 
+You will develop a program that will open and read the contents of an input test file. The file name will be provided **as a command line argument**. This means that your code will need a `main()` function. <br>Each test file is a text file containing tweets of a news agency. For example, `bbchealth.txt` is related to BBC health news. Each line contains tweets following the format: `tweet id|date` and `time|tweet`. You can assume the separator between fields on each line is always `'|'`.
 
 Here is an example tweet from the dataset:
+
 ```
 515169518445146112|Thu Sep 25 16:02:39 +0000 2014|American #Ebola patient Dr. Rick Sacra has been released from the hospital
 ```
+
 From this, the `time` will only be this section: `16:02:39` (It's in military time)<br>
 Additionally, the `tweet` would only be this section: `American #Ebola patient Dr. Rick Sacra has been released from the hospital`
 
@@ -83,6 +82,7 @@ While reading the contents of the input file line-by-line, your program will be 
 * `p`: prints the previous tweet (chronologically) to the stdout
 * `f`: prints the first tweet (oldest) to the stdout
 * `l`: prints the last tweet (most recent) to the stdout
+* `num`: prints the number of tweets stored in the list
 * `<number>`: skips tweets circularly and prints the current to the stdout
 * `s <word>`: searches for the next occurrence of the substring word in the following tweets (search is case insensitive and performs a circular traversal in the list)
 * `q`: quits the program
@@ -93,8 +93,7 @@ The sections below show the distribution of points for the assignment:
 
 |**Linked List Methods** |**30 Points Total**|
 |      ---      |       ---         |
-|append()       |     5 points      |
-|prepend()      |     5 points      |
+|insert()       |     10 points     |
 |go_next()      |     3 points      |
 |go_prev()      |     3 points      |
 |go_first()     |     3 points      |
@@ -106,10 +105,11 @@ The sections below show the distribution of points for the assignment:
 
 |**Tweet Reader Input Functionality**                       |**50 Points Total**|
 |      ---                                                  |       ---         |
-|`n`    (go to the next tweet)                              |     6 points      |
-|`p`    (go to the previous tweet)                          |     6 points      |
-|`f`    (go to the first tweet)                             |     6 points      |
-|`l`    (go to the last tweet)                              |     6 points      |
+|`n`    (go to the next tweet)                              |     4 points      |
+|`p`    (go to the previous tweet)                          |     4 points      |
+|`f`    (go to the first tweet)                             |     4 points      |
+|`l`    (go to the last tweet)                              |     4 points      |
+|`num`  (prints the number of tweets in the list)           |     8 points      |
 |`<number>` (go to the tweet `<number>` tweets away)        |     10 points     |
 |`s <word>` (search for a word from the tweets in your list)|     14 points     |
 |`q` (quit the program)                                     |     2 points      |
@@ -135,7 +135,6 @@ Your program will be automatically graded. For each of the questions you either 
 Students caught cheating or plagiarizing will receive no credit. Additional actions, including a failing grade in the class or referring the case for disciplinary action, may also be taken.
 
 Late submissions will receive a ZERO.
-
 
 ## **Your Gradescope submissions will not show how many points you have until after the due date has passed. It is on you to follow the requirements for each section, and to come up with your own thorough test cases that make sure that each part is complete and correct. You are allowed unlimited resubmissions until the due date.**
 

@@ -1,48 +1,39 @@
+"""Circular Doubly Linked List"""
 import sys
 import unittest
 import io
 
-"""
-Doubly Linked List
-"""
+
 # Node
 class CDLLNode:
+    """ Node for our CDLL
+    Requires a timestamp and tweet
+    """
 
-    def __init__(self, time = "", tweet = "", next_node = None, prev_node = None):
+    def __init__(self, time="", tweet="", next_node=None, prev_node=None):
         """
         Constructor
-
         Default values set to none
-
         If the user passes a value to the constructor, it's set
         """
         self.time: str = time
         self.tweet: str = tweet
         self.next_node: CDLLNode = next_node
         self.prev_node: CDLLNode = prev_node
-    """
-    # destructor
-    def __del__(self):
-        # prints the data that was deleted
-        print(self.time)
-        print(self.tweet)
-    """
+
 
 # Linked List
 class CDLL:
     """
     Circular Doubly Linked List
-
     Each node points to the next and previous nodes
-
     The head and tail point to each other
     """
+
     def __init__(self):
         """
         Constructor
-
         Sets 'head' and 'current' to none
-
         Sets the number of nodes to 0
         """
         self.head: CDLLNode = None
@@ -50,13 +41,9 @@ class CDLL:
         self.numnodes: int = 0
 
     def insert(self, time: str, tweet: str):
-        """
-        Takes the time and the tweet,
-
+        """Takes the time and the tweet,
         Creates a node to insert into our list at current
-
         If our list is empty, adds the node at 'head'
-
         Otherwise, adds the node at 'current.prev'
         """
         # if empty list
@@ -65,7 +52,6 @@ class CDLL:
             self.head = self.current = CDLLNode(time, tweet)
             # make the next and prev values the node itself
             self.head.next_node = self.head.prev_node = self.head
-        # if list with at least one element
         else:
             # make a new node
             nnode = CDLLNode(time, tweet)
@@ -75,9 +61,14 @@ class CDLL:
             # point current to this node, and back
             nnode.next_node = self.current
             self.current.prev_node = nnode
-            # check for if we were making this the new 'head'
-            if self.current == self.head:
-                self.head = nnode
+            # if we went through the entire list
+            if self.current is self.head:
+                # check for prepending the node
+                prep = self.time_check(time)
+                # if we need to prepend it
+                if prep:
+                    # update head
+                    self.head = nnode
             # set current to the newly created node
             self.current = nnode
 
@@ -129,19 +120,18 @@ class CDLL:
         print(self.current.time)
         print(self.current.tweet)
 
-    def time_check(self, time: str)->bool:
-        # check the time of the current node
-        # against the passed time
-        # x iterates through Hours, Minutes, Seconds
+    def time_check(self, time: str) -> bool:
+        """Compare the time of the current node against the passed time"""
         if self.head == None:
             return True
+        # x iterates through Hours, Minutes, Seconds
         for x in range(3):
             # If current x is more than the passed one
-            if int(self.current.time[3*x:(3*x)+2]) > int(time[3*x:(3*x)+2]):
+            if int(self.current.time[3 * x:(3 * x) + 2]) > int(time[3 * x:(3 * x) + 2]):
                 # Prepend the tweet
                 return True
             # If the current x is less than the passed one
-            elif int(self.current.time[3*x:(3*x)+2]) < int(time[3*x:(3*x)+2]):
+            elif int(self.current.time[3 * x:(3 * x) + 2]) < int(time[3 * x:(3 * x) + 2]):
                 # leave, check the next tweet
                 return False
             # arbitrarily prepend if all values equal
@@ -151,9 +141,10 @@ class CDLL:
             else:
                 continue
 
-def myParser(sentence: str)->tuple:
+
+def myParser(sentence: str) -> tuple:
     """
-    Takes a sentence to parse, 
+    Takes a sentence to parse,
     returns the parsed elements in a tuple as (time, tweet)
     """
     # splits into 3 parts, based on '|'
@@ -167,13 +158,13 @@ def myParser(sentence: str)->tuple:
     # append these into our Linked List
     return (ttime, tdata)
 
+
 def populateList(LList: CDLL, filedat):
     # having tweetdata as a variable, parse it
     # and add it to the linked list
     for x in filedat:
         # parse for the time and tweet
         time, tweet = myParser(x)
-        # set list to head
         LList.go_first()
         # traverse the list, insert if you find a place
         for y in range(LList.numnodes):
@@ -182,29 +173,22 @@ def populateList(LList: CDLL, filedat):
                 LList.insert(time, tweet)
                 break
             else:
-                LList.go_next
+                LList.go_next()
         # if you go through the entire list, insert it as the tail
         else:
-            LList.go_first
-            LList.insert(time,tweet)
+            LList.insert(time, tweet)
+        # LList.print_all()
 
-def userinloop(LList: CDLL)->None:
+
+def userinloop(LList: CDLL) -> None:
     """Event Loop
-
     Input:
-
     `n`: prints the next tweet (chronologically) to the stdout
-
     `p`: prints the previous tweet (chronologically) to the stdout
-
     `f`: prints the first tweet (oldest) to the stdout
-
     `l`: prints the last tweet (most recent) to the stdout
-
     `<number>`: skips tweets circularly and prints the current to the stdout
-
     `s <word>`: searches for the next occurrence of the substring word in the following tweets (search is case insensitive and performs a circular traversal in the list)
-
     `q`: quits the program
     """
     # get the users command, and enter a loop with it
@@ -272,9 +256,10 @@ def userinloop(LList: CDLL)->None:
                 print("Please enter a valid command")
         # get new user input
         usercom = input("Please enter a command: ")
-    
+
     # go back to main
     return
+
 
 def main():
     # make sure the file is passed as a command line arg
@@ -297,6 +282,9 @@ def main():
     # populate the Linked List with the tweet data
     populateList(TweetLL, tweetdata)
 
+    # go to the first element in the list
+    TweetLL.go_first()
+
     # print the head tweet
     TweetLL.print_current()
 
@@ -306,9 +294,11 @@ def main():
     # done
     return
 
+
 class TestLinkedList(unittest.TestCase):
     """
     30 Points
+    """
     """
     def test_eval_prepend(self):
         llpre = CDLL()
@@ -319,7 +309,6 @@ class TestLinkedList(unittest.TestCase):
             sout.append(llpre.current.tweet)
             llpre.go_next()
         self.assertListEqual(sout,["1", "2", "3"])
-
     def test_eval_append(self):
         llapp = CDLL()
         for i in range(0,10):
@@ -329,7 +318,6 @@ class TestLinkedList(unittest.TestCase):
             sout.append(llapp.current.time)
             llapp.go_next()
         self.assertListEqual(sout,["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
-
     def test_eval_go_next(self):
         llgn = CDLL()
         for i in range(2):
@@ -337,7 +325,6 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(llgn.current.tweet, "0")
         llgn.go_next()
         self.assertEqual(llgn.current.tweet, "1")
-
     def test_eval_go_prev(self):
         llgp = CDLL()
         for i in range(5):
@@ -345,7 +332,6 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(llgp.current.time, "4")
         llgp.go_prev()
         self.assertEqual(llgp.current.time, "0")
-
     def test_eval_go_first(self):
         llgf = CDLL()
         for i in range(20):
@@ -355,7 +341,6 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(llgf.current.time, "10")
         llgf.go_first()
         self.assertEqual(llgf.current.time, "0")
-
     def test_eval_go_last(self):
         llgl = CDLL()
         for i in range(50):
@@ -365,7 +350,6 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(llgl.current.tweet, "26")
         llgl.go_last()
         self.assertEqual(llgl.current.tweet, "0")
-
     def test_eval_skip(self):
         lls = CDLL()
         for i in range(40):
@@ -378,20 +362,18 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(lls.current.time, "Hello")
         lls.skip(50)
         self.assertEqual(lls.current.time, "There")
-
     def test_eval_print_cur(self):
         llpc = CDLL()
         studout = io.StringIO()
         origout = sys.stdout
-
         llpc.append("This Is","The Test")
-
         sys.stdout = studout
         llpc.print_current()
-
         self.assertEqual(studout.getvalue(),"This Is\nThe Test\n")
         sys.stdout = origout
+    """
+
 
 if __name__ == "__main__":
-    #unittest.main()
+    # unittest.main()
     main()
