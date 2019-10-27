@@ -1,13 +1,14 @@
+"""Circular Doubly Linked List"""
 import sys
 import unittest
 import io
 
-"""
-Doubly Linked List
-"""
 # Node
 class CDLLNode:
+    """ Node for our CDLL
 
+    Requires a timestamp and tweet
+    """
     def __init__(self, time = "", tweet = "", next_node = None, prev_node = None):
         """
         Constructor
@@ -20,13 +21,6 @@ class CDLLNode:
         self.tweet: str = tweet
         self.next_node: CDLLNode = next_node
         self.prev_node: CDLLNode = prev_node
-    """
-    # destructor
-    def __del__(self):
-        # prints the data that was deleted
-        print(self.time)
-        print(self.tweet)
-    """
 
 # Linked List
 class CDLL:
@@ -64,7 +58,6 @@ class CDLL:
             self.head = self.current = CDLLNode(time, tweet)
             # make the next and prev values the node itself
             self.head.next_node = self.head.prev_node = self.head
-        # if list with at least one element
         else:
             # make a new node
             nnode = CDLLNode(time, tweet)
@@ -74,9 +67,14 @@ class CDLL:
             # point current to this node, and back
             nnode.next_node = self.current
             self.current.prev_node = nnode
-            # check for if we were making this the new 'head'
-            if self.current == self.head:
-                self.head = nnode
+            # if we went through the entire list
+            if self.current is self.head:
+                # check for prepending the node
+                prep = self.time_check(time)
+                # if we need to prepend it
+                if prep:
+                    # update head
+                    self.head = nnode
             # set current to the newly created node
             self.current = nnode
 
@@ -171,7 +169,6 @@ def populateList(LList: CDLL, filedat):
     for x in filedat:
         # parse for the time and tweet
         time, tweet = myParser(x)
-        # set list to head
         LList.go_first()
         # traverse the list, insert if you find a place
         for y in range(LList.numnodes):
@@ -180,10 +177,11 @@ def populateList(LList: CDLL, filedat):
                 LList.insert(time, tweet)
                 break
             else:
-                LList.go_next
+                LList.go_next()
         # if you go through the entire list, insert it as the tail
-        else:
+        else:   
             LList.insert(time,tweet)
+        #LList.print_all()
 
 def userinloop(LList: CDLL)->None:
     """Event Loop
@@ -294,6 +292,9 @@ def main():
     # populate the Linked List with the tweet data
     populateList(TweetLL, tweetdata)
 
+    # go to the first element in the list
+    TweetLL.go_first()
+
     # print the head tweet
     TweetLL.print_current()
 
@@ -306,6 +307,7 @@ def main():
 class TestLinkedList(unittest.TestCase):
     """
     30 Points
+    """
     """
     def test_eval_prepend(self):
         llpre = CDLL()
@@ -388,6 +390,7 @@ class TestLinkedList(unittest.TestCase):
 
         self.assertEqual(studout.getvalue(),"This Is\nThe Test\n")
         sys.stdout = origout
+    """
 
 if __name__ == "__main__":
     #unittest.main()
