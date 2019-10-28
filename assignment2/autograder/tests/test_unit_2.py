@@ -8,7 +8,7 @@ class TestTweetReader(unittest.TestCase):
     """Test Tweet Reader - 50 points"""
 
     def setUp(self):
-        self.test = 'tests/KaiserHealthNews.txt'
+        self.test = 'tests/bbchealth.txt'
         self.testpy = 'tests/testassignment2.py'
 
     def test_process(self, stinput: str) -> bool:

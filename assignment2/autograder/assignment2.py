@@ -272,8 +272,13 @@ def userinloop(LList: CDLL)->None:
     return
 
 def main():
+    try:
+        sys.argv[1]
+    except IndexError:
+        print("File Not Passed")
+        return 1
     # make sure we can actually open the passed filename
-    with open(filename,'r') as f:
+    with open(sys.argv[1],'r') as f:
         tweetdata = f.readlines()
 
     # make linked list
@@ -293,5 +298,5 @@ def main():
     # done
     return
 
-if __name__ is "__main__":
+if __name__ == "__main__":
     main()
