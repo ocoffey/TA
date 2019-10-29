@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#!/usr/bin/env python3
+
+# Run assignment 2 on all text files
+cd ~/Documents/Github/TA/assignment2/autograder
+for d in Health-Tweets/*.txt
+do
+    python3 assignment2.py "$d"
+done
