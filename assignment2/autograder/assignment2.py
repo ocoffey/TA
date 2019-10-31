@@ -276,7 +276,7 @@ def main():
         sys.argv[1]
     except IndexError:
         print("File Not Passed")
-        return 1
+        return
     # make sure we can actually open the passed filename
     with open(sys.argv[1],'r') as f:
         tweetdata = f.readlines()
