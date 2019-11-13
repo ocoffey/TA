@@ -1,25 +1,77 @@
 import unittest
 from gradescope_utils.autograder_utils.decorators import weight
+<<<<<<< HEAD
 
 
 
+=======
+import os
+import re
+import subprocess
+>>>>>>> 92b7776559c84c03734bb2a41ebc1f23d238bd5c
 
 class TestTweetReader(unittest.TestCase):
     """Test Tweet Reader - 50 points"""
 
-    """
-    20 Points
-    Skip in small time
-    ?????Skip in smaller time?? (go_next or go_prev based on numnodes/2,
-    and how big n % numnodes is)?????
-    Go Last in constant time
-    Append in constant time
-    """
+    def setUp(self):
+        self.test = 'tests/nprhealth.txt'
+        self.testpy = 'tests/testassignment2.py'
 
-    """
-    Used for templating
+    def sub_func(self, stinput: str) -> bool:
+        """Function call to actually run the test"""
+        # runs the students file, passing a .txt file
+        studp = subprocess.run(['python3', 'assignment2.py', self.test], stdout=subprocess.PIPE, input=stinput, encoding='ascii')
+        # runs our file, passing the same .txt file
+        testp = subprocess.run(['python3', self.testpy, self.test], stdout=subprocess.PIPE, input=stinput, encoding='ascii')
+        # strips students stdout of all whitespace
+        studstripped = re.sub(r"([\s\t\n])", r"", studp.stdout.strip())
+        # strips our stdout of all whitespace
+        teststripped = re.sub(r"([\s\t\n])", r"", testp.stdout.strip())
+        # Make sure that both returned 0
+        if studp.returncode == testp.returncode and testp.returncode == 0:
+            # compares outputs and returns that bool
+            return studstripped == teststripped
+        # Let me know if I made an error
+        elif testp.returncode != 0:
+            print("I made an error")
+            print(self.test, end='')
+            print(" was the filename passed.")
+            return False
+        # If the student didn't return 0
+        else:
+            return False
+
+
+    @weight(2)
+    def test_quit(self):
+        testq = subprocess.run(['python3', 'assignment2.py', self.test], stdout=subprocess.PIPE, input='q\n', encoding='ascii')
+        self.assertEqual(testq.returncode,0)
+        return
     
-    @weight(5)
-    def test_eval_altbubsorted(self):
-        self.assertEqual(alt_bubblesort([1, 2, 3, 4, 5, 6, 7, 8], 8), [1, 2, 3, 4, 5, 6, 7, 8])
-    """
+    @weight(4)
+    def test_next(self):
+        self.assertIs(self.sub_func('n\nq\n'),True)
+
+    @weight(4)
+    def test_prev(self):
+        self.assertIs(self.sub_func('p\nq\n'),True)
+
+    @weight(4)
+    def test_first(self):
+        self.assertIs(self.sub_func('f\nq\n'),True)
+
+    @weight(4)
+    def test_last(self):
+        self.assertIs(self.sub_func('l\nq\n'),True)
+
+    @weight(8)
+    def test_num(self):
+        self.assertIs(self.sub_func('num\nq\n'),True)
+
+    @weight(10)
+    def test_skip(self):
+        self.assertIs(self.sub_func('5000\nq\n'),True)
+
+    @weight(14)
+    def test_search(self):
+        self.assertIs(self.sub_func('s cancer\nq\n'),True)

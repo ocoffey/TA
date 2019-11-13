@@ -210,7 +210,7 @@ def userinloop(LList: CDLL) -> None:
     `q`: quits the program
     """
     # get the users command, and enter a loop with it
-    usercom = input("Please enter a command: ")
+    usercom = input()
     # if user input is 'q', leave the event loop
     while usercom != 'q':
         # if 'n', print the next tweet
@@ -274,27 +274,26 @@ def userinloop(LList: CDLL) -> None:
             except ValueError:
                 print("Please enter a valid command")
         # get new user input
+<<<<<<< HEAD:assignment2/assignment2.py
         usercom = input("Please enter a command: ")
 
+=======
+        usercom = input()
+    
+>>>>>>> 92b7776559c84c03734bb2a41ebc1f23d238bd5c:assignment2/autograder/assignment2.py
     # go back to main
     return
 
 
 def main():
-    # make sure the file is passed as a command line arg
     try:
-        filename = sys.argv[1]
+        sys.argv[1]
     except IndexError:
-        print("Please include a filename as a command line argument")
+        print("File Not Passed")
         return
-
     # make sure we can actually open the passed filename
-    try:
-        with open(filename) as f:
-            tweetdata = f.readlines()
-    except FileNotFoundError:
-        print("Couldn't open the file, please make sure it's within the directory")
-        return
+    with open(sys.argv[1],'r') as f:
+        tweetdata = f.readlines()
 
     # make linked list
     TweetLL = CDLL()
@@ -313,6 +312,7 @@ def main():
     # done
     return
 
+<<<<<<< HEAD:assignment2/assignment2.py
 
 class TestLinkedList(unittest.TestCase):
     """
@@ -416,3 +416,7 @@ if __name__ == "__main__":
 
 
 
+=======
+if __name__ == "__main__":
+    main()
+>>>>>>> 92b7776559c84c03734bb2a41ebc1f23d238bd5c:assignment2/autograder/assignment2.py
