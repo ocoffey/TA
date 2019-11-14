@@ -63,9 +63,9 @@ class CDLL:
             # make the next and prev values the node itself
             self.head.next_node = self.head.prev_node = self.head
         else:
-            # make a new node
             nnode = CDLLNode(time, tweet)
             # point node before current to this node, and back
+            # make a new node
             nnode.prev_node = self.current.prev_node
             self.current.prev_node.next_node = nnode
             # point current to this node, and back
@@ -274,13 +274,8 @@ def userinloop(LList: CDLL) -> None:
             except ValueError:
                 print("Please enter a valid command")
         # get new user input
-<<<<<<< HEAD:assignment2/assignment2.py
         usercom = input("Please enter a command: ")
-
-=======
         usercom = input()
-    
->>>>>>> 92b7776559c84c03734bb2a41ebc1f23d238bd5c:assignment2/autograder/assignment2.py
     # go back to main
     return
 
@@ -312,7 +307,7 @@ def main():
     # done
     return
 
-<<<<<<< HEAD:assignment2/assignment2.py
+
 
 class TestLinkedList(unittest.TestCase):
     """
@@ -416,7 +411,3 @@ if __name__ == "__main__":
 
 
 
-=======
-if __name__ == "__main__":
-    main()
->>>>>>> 92b7776559c84c03734bb2a41ebc1f23d238bd5c:assignment2/autograder/assignment2.py
