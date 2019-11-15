@@ -1,8 +1,11 @@
 import sys
 import re
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 8d0ed4521299d3b35744dec7e5fc086eb0fb25bb
 """
 Open and read in story .txt file
 """
@@ -48,4 +51,7 @@ for line in story:
         # if not, print it
         except KeyError:
             print(word)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8d0ed4521299d3b35744dec7e5fc086eb0fb25bb
