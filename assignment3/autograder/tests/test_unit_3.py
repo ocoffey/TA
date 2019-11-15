@@ -8,8 +8,8 @@ class TestAdditional(unittest.TestCase):
     """Additional Tests - 30 points"""
 
     def setUp(self):
-        self.test = 'tests/nprhealth.txt'
-        self.testpy = 'tests/testassignment2.py'
+        self.test = 'tests/miserable.txt'
+        self.testpy = 'tests/testassignment3.py'
 
     def sub_func(self, stinput: str) -> bool:
         """Function call to actually run the test"""

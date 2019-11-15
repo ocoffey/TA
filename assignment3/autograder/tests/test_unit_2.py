@@ -1,26 +1,21 @@
 import unittest
 from gradescope_utils.autograder_utils.decorators import weight
-<<<<<<< HEAD
-
-
-
-=======
 import os
 import re
 import subprocess
->>>>>>> 92b7776559c84c03734bb2a41ebc1f23d238bd5c
+
 
 class TestTweetReader(unittest.TestCase):
     """Test Tweet Reader - 50 points"""
 
     def setUp(self):
-        self.test = 'tests/nprhealth.txt'
-        self.testpy = 'tests/testassignment2.py'
+        self.test = 'tests/miserable.txt'
+        self.testpy = 'tests/testassignment3.py'
 
     def sub_func(self, stinput: str) -> bool:
         """Function call to actually run the test"""
         # runs the students file, passing a .txt file
-        studp = subprocess.run(['python3', 'assignment2.py', self.test], stdout=subprocess.PIPE, input=stinput, encoding='ascii')
+        studp = subprocess.run(['python3', 'assignment3.py', self.test], stdout=subprocess.PIPE, input=stinput, encoding='ascii')
         # runs our file, passing the same .txt file
         testp = subprocess.run(['python3', self.testpy, self.test], stdout=subprocess.PIPE, input=stinput, encoding='ascii')
         # strips students stdout of all whitespace
@@ -44,7 +39,7 @@ class TestTweetReader(unittest.TestCase):
 
     @weight(2)
     def test_quit(self):
-        testq = subprocess.run(['python3', 'assignment2.py', self.test], stdout=subprocess.PIPE, input='q\n', encoding='ascii')
+        testq = subprocess.run(['python3', 'assignment3.py', self.test], stdout=subprocess.PIPE, input='q\n', encoding='ascii')
         self.assertEqual(testq.returncode,0)
         return
     
