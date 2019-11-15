@@ -1,20 +1,8 @@
 import sys
-<<<<<<< HEAD
-
-class HashTable:
-
-
-
-
-def main():
-    try:
-        sys.argv[1]
-    except IndexError:
-        print("File Not Passed")
-        return
-
-=======
 import re
+
+
+
 """
 Open and read in story .txt file
 """
@@ -60,4 +48,4 @@ for line in story:
         # if not, print it
         except KeyError:
             print(word)
->>>>>>> 0e889e383b19a213f58e1e89e3e4c2ca27d6b567
+
