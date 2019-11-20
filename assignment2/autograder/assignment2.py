@@ -3,15 +3,13 @@ import sys
 import unittest
 import io
 
-
 # Node
 class CDLLNode:
     """ Node for our CDLL
 
     Requires a timestamp and tweet
     """
-
-    def __init__(self, time="", tweet="", next_node=None, prev_node=None):
+    def __init__(self, time = "", tweet = "", next_node = None, prev_node = None):
         """
         Constructor
 
@@ -24,7 +22,6 @@ class CDLLNode:
         self.next_node: CDLLNode = next_node
         self.prev_node: CDLLNode = prev_node
 
-
 # Linked List
 class CDLL:
     """
@@ -34,7 +31,6 @@ class CDLL:
 
     The head and tail point to each other
     """
-
     def __init__(self):
         """
         Constructor
@@ -63,9 +59,9 @@ class CDLL:
             # make the next and prev values the node itself
             self.head.next_node = self.head.prev_node = self.head
         else:
+            # make a new node
             nnode = CDLLNode(time, tweet)
             # point node before current to this node, and back
-            # make a new node
             nnode.prev_node = self.current.prev_node
             self.current.prev_node.next_node = nnode
             # point current to this node, and back
@@ -130,18 +126,18 @@ class CDLL:
         print(self.current.time)
         print(self.current.tweet)
 
-    def time_check(self, time: str) -> bool:
+    def time_check(self, time: str)->bool:
         """Compare the time of the current node against the passed time"""
         if self.head == None:
             return True
         # x iterates through Hours, Minutes, Seconds
         for x in range(3):
             # If current x is more than the passed one
-            if int(self.current.time[3 * x:(3 * x) + 2]) > int(time[3 * x:(3 * x) + 2]):
+            if int(self.current.time[3*x:(3*x)+2]) > int(time[3*x:(3*x)+2]):
                 # Prepend the tweet
                 return True
             # If the current x is less than the passed one
-            elif int(self.current.time[3 * x:(3 * x) + 2]) < int(time[3 * x:(3 * x) + 2]):
+            elif int(self.current.time[3*x:(3*x)+2]) < int(time[3*x:(3*x)+2]):
                 # leave, check the next tweet
                 return False
             # arbitrarily prepend if all values equal
@@ -151,8 +147,7 @@ class CDLL:
             else:
                 continue
 
-
-def myParser(sentence: str) -> tuple:
+def myParser(sentence: str)->tuple:
     """
     Takes a sentence to parse,
     returns the parsed elements in a tuple as (time, tweet)
@@ -167,7 +162,6 @@ def myParser(sentence: str) -> tuple:
     ttime = parse[3]
     # append these into our Linked List
     return (ttime, tdata)
-
 
 def populateList(LList: CDLL, filedat):
     # having tweetdata as a variable, parse it
@@ -186,11 +180,10 @@ def populateList(LList: CDLL, filedat):
                 LList.go_next()
         # if you go through the entire list, insert it as the tail
         else:
-            LList.insert(time, tweet)
-        # LList.print_all()
+            LList.insert(time,tweet)
+        #LList.print_all()
 
-
-def userinloop(LList: CDLL) -> None:
+def userinloop(LList: CDLL)->None:
     """Event Loop
 
     Input:
@@ -217,7 +210,6 @@ def userinloop(LList: CDLL) -> None:
         if usercom == 'n':
             LList.go_next()
             LList.print_current()
-
         # if 'p', print the previous tweet
         elif usercom == 'p':
             LList.go_prev()
@@ -274,18 +266,17 @@ def userinloop(LList: CDLL) -> None:
             except ValueError:
                 print("Please enter a valid command")
         # get new user input
-        usercom = input("Please enter a command: ")
         usercom = input()
+
     # go back to main
     return
-
 
 def main():
     try:
         sys.argv[1]
     except IndexError:
         print("File Not Passed")
-        return
+        return 1
     # make sure we can actually open the passed filename
     with open(sys.argv[1],'r') as f:
         tweetdata = f.readlines()
@@ -307,107 +298,5 @@ def main():
     # done
     return
 
-
-
-class TestLinkedList(unittest.TestCase):
-    """
-    30 Points
-    """
-    """
-    def test_eval_prepend(self):
-        llpre = CDLL()
-        for i in range(3,0,-1):
-            llpre.prepend("",str(i))
-        sout = []
-        for i in range(3,0,-1):
-            sout.append(llpre.current.tweet)
-            llpre.go_next()
-        self.assertListEqual(sout,["1", "2", "3"])
-
-    def test_eval_append(self):
-        llapp = CDLL()
-        for i in range(0,10):
-            llapp.append(str(i),"")
-        sout = []
-        for i in range(0, 10):
-            sout.append(llapp.current.time)
-            llapp.go_next()
-        self.assertListEqual(sout,["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
-
-    def test_eval_go_next(self):
-        llgn = CDLL()
-        for i in range(2):
-            llgn.append("",str(i))
-        self.assertEqual(llgn.current.tweet, "0")
-        llgn.go_next()
-        self.assertEqual(llgn.current.tweet, "1")
-
-    def test_eval_go_prev(self):
-        llgp = CDLL()
-        for i in range(5):
-            llgp.prepend(str(i),"")
-        self.assertEqual(llgp.current.time, "4")
-        llgp.go_prev()
-        self.assertEqual(llgp.current.time, "0")
-
-    def test_eval_go_first(self):
-        llgf = CDLL()
-        for i in range(20):
-            llgf.append(str(i),"")
-        for i in range(10):
-            llgf.go_next()
-        self.assertEqual(llgf.current.time, "10")
-        llgf.go_first()
-        self.assertEqual(llgf.current.time, "0")
-
-    def test_eval_go_last(self):
-        llgl = CDLL()
-        for i in range(50):
-            llgl.prepend("",str(i))
-        for i in range(27):
-            llgl.go_prev()
-        self.assertEqual(llgl.current.tweet, "26")
-        llgl.go_last()
-        self.assertEqual(llgl.current.tweet, "0")
-
-    def test_eval_skip(self):
-        lls = CDLL()
-        for i in range(40):
-            if i%3 == 0:
-                lls.append("Hello","")
-            elif i%3 == 1:
-                lls.append("There","")
-            else:
-                lls.append("Again","")
-        self.assertEqual(lls.current.time, "Hello")
-        lls.skip(50)
-        self.assertEqual(lls.current.time, "There")
-
-    def test_eval_print_cur(self):
-        llpc = CDLL()
-        studout = io.StringIO()
-        origout = sys.stdout
-
-        llpc.append("This Is","The Test")
-
-        sys.stdout = studout
-        llpc.print_current()
-
-        self.assertEqual(studout.getvalue(),"This Is\nThe Test\n")
-        sys.stdout = origout
-    """
-
-
 if __name__ == "__main__":
-    # unittest.main()
-    #main()
-    lls = CDLL()
-    for i in range(10):
-        lls.insert("00:00:0" + str(i), "")
-    #self.assertEqual(lls.current.time, "00:00:09")
-    lls.skip(34)
-    print(lls.current.time)
-
-
-
-
+    main()
