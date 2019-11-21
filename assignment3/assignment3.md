@@ -20,20 +20,68 @@ Your job is to write a program that will determine if the words in each of three
 $source getbooks.sh
 ```
 
-Note that the books are different than the ones from the labs. You can find the dictionary needed for your work [here](link).
+Note that the books are different than the ones used in the labs. You can find the dictionary needed for your work [here](link).
+
+## Making a Hash Table
+First you must create a class which implements a hash table using a hash function. This class, `HashTable` is made up of the following functions: `make_table`, `make_hash`, `insert`, and `lookup` (detials on what these do are included in the code below). This class also has a constructor which takes in the length of the table, and a list of the same length which is made of strings. Your class must be written in the `assignment3.py` file.
+
+```python
+class HashTable:
+    """Hast Table Class"""
+    def __init__(self, size: int = 0):
+        """Constructor
+        
+        Takes a size, stores it
+        Makes a list of the given size
+        """
+        self.size: int = size
+        self.table: list = []
+        self.make_table()
+    
+    def make_table(self) -> None:
+        """Hash Table Creator
+        
+        Makes a table of the class's size"""
+    def make_hash(self, word: str) -> int:
+        """Hash Creator
+        
+        Takes a string, applies a hash method to it,
+        and returns an int (the index to store the word)
+        """
+     def insert(self, word: str) -> None:
+        """Insert
+        Gets a hash for the given word, and
+        attaches the word there
+        """
+    def lookup(self, word: str) -> bool:
+        """Lookup
+        Returns True if the word is in the table
+        """
+
+```
+**You must use this class to create your hash table. DO NOT use a python dictionary**
+
 
 ## Spell Check
 
-Once you have downloaded the books and the dictionary, read all of the words in the **dictionary** provided into a hash-table as an unordered set.
+Once you have downloaded the books, the dictionary, and implemented the `HashTable` class read all of the words in the **dictionary** provided into a hash-table as an unordered set.
 
 Basically an unordered set is an associative container that contains a set of unique objects of type Key. Search, insertion, and removal can then be done on average in constant-time complexity. Internally, the elements of an unordered set are are not sorted in any particular order, but organized into buckets (hence hash-table). Which bucket an element is placed into depends entirely on the hash of its value. This allows fast access to individual elements, since once a hash is computed, it refers to the exact bucket the element is placed into.
 
-Once you have loaded the dictionary, open each book, and output words that have spelling errors.
+Once you have loaded the dictionary, open each book, clean up the text of the books by removing non-alphanumeric values which aren't astrophobes('). Then you should compare each of the words in the book with the words in the dictionary. Print out each word which is NOT in the dictionary but is in the book.
 
 #### Note: 
 
-* No starter code will be given for this assignment. It is entirely up to you to implement the program from scratch.
+* **PLEASE USE the exact method definitions as given for each question.** If you do not, then the autograder on Gradescope will not be able to recognize your answer and will give you a zero.
 * The hash table for unordered sets has to be implemented by you. You canot use the in-built collections/libraries provided by Python for this purpose
+
+## Point Distrubtion:
+The sections below show the distribution of points for the assignment:
+
+|**Hash Table Methods** |**60 Points Total**|
+|      ---        |       ---         |
+|**Spell Checker**|**40 Points Total**|
+
 
 ## SUBMISSION
 
