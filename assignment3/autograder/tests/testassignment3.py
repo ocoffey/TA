@@ -37,7 +37,7 @@ Print words from the file if they're not in the dict
 # for each line in the story
 for line in story:
     # replace junk chars with "", split based on whitespace
-    line = re.sub(",|\.|!|\?|:|;|\(|\)|-|/", "", line).split()
+    line = re.sub(r"([^a-zA-Z0-9'])", r"", line).split()
     # see if each word is in the dict
     for word in line:
         try:
