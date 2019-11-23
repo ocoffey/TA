@@ -38,8 +38,14 @@ class TestAdditional(unittest.TestCase):
     @weight(10)
     def test_chrono(self):
         inps = 'n\nn\nn\nn\nn\nn\nn\nn\n500\nn\nn\nn\nn\nn\nn\nn\nn\nf\np\np\np\np\np\np\nq\n'
-        self.assertIs(self.sub_func(inps),True)
+        try:
+            self.assertIs(self.sub_func(inps),True)
+        except AssertionError:
+            assert False, "Tweets Not In Chronological Order (Note: This Test Uses Skip)"
 
     @weight(10)
     def test_rand(self):
-        self.assertIs(self.sub_func('50000\n600\nq\n'),True)
+        try:
+            self.assertIs(self.sub_func('50000\n600\nq\n'),True)
+        except AssertionError:
+            assert False, "Two Random Tweets Not Equal (Note: This Test Uses Skip)"

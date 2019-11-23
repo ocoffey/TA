@@ -1,14 +1,8 @@
 import unittest
 from gradescope_utils.autograder_utils.decorators import weight
-<<<<<<< HEAD
-
-
-
-=======
 import os
 import re
 import subprocess
->>>>>>> 92b7776559c84c03734bb2a41ebc1f23d238bd5c
 
 class TestTweetReader(unittest.TestCase):
     """Test Tweet Reader - 50 points"""
@@ -45,33 +39,57 @@ class TestTweetReader(unittest.TestCase):
     @weight(2)
     def test_quit(self):
         testq = subprocess.run(['python3', 'assignment2.py', self.test], stdout=subprocess.PIPE, input='q\n', encoding='ascii')
-        self.assertEqual(testq.returncode,0)
+        try:
+            self.assertEqual(testq.returncode,0)
+        except AssertionError:
+            assert False, "q Input Did Not Quit"
         return
     
     @weight(4)
     def test_next(self):
-        self.assertIs(self.sub_func('n\nq\n'),True)
+        try:
+            self.assertIs(self.sub_func('n\nq\n'),True)
+        except AssertionError:
+            assert False, "n Input Did Not Go Next"
 
     @weight(4)
     def test_prev(self):
-        self.assertIs(self.sub_func('p\nq\n'),True)
+        try:
+            self.assertIs(self.sub_func('p\nq\n'),True)
+        except AssertionError:
+            assert False, "p Input Did Not Go Previous"
 
     @weight(4)
     def test_first(self):
-        self.assertIs(self.sub_func('f\nq\n'),True)
+        try:
+            self.assertIs(self.sub_func('f\nq\n'),True)
+        except AssertionError:
+            assert False, "f Input Did Not Go First"
 
     @weight(4)
     def test_last(self):
-        self.assertIs(self.sub_func('l\nq\n'),True)
+        try:
+            self.assertIs(self.sub_func('l\nq\n'),True)
+        except AssertionError:
+            assert False, "l Input Did Not Go Last"
 
     @weight(8)
     def test_num(self):
-        self.assertIs(self.sub_func('num\nq\n'),True)
+        try:
+            self.assertIs(self.sub_func('num\nq\n'),True)
+        except AssertionError:
+            assert False, "num Input Did Not Print Number Of Nodes"
 
     @weight(10)
     def test_skip(self):
-        self.assertIs(self.sub_func('5000\nq\n'),True)
+        try:
+            self.assertIs(self.sub_func('5000\nq\n'),True)
+        except AssertionError:
+            assert False, "skip Input Did Not Go To The Correct Node"
 
     @weight(14)
     def test_search(self):
-        self.assertIs(self.sub_func('s cancer\nq\n'),True)
+        try:
+            self.assertIs(self.sub_func('s cancer\nq\n'),True)
+        except AssertionError:
+            assert False, "s <word> Input Did Not Give Next Occurrence Of <word>"
