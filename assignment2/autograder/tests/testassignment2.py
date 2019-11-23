@@ -3,13 +3,15 @@ import sys
 import unittest
 import io
 
+
 # Node
 class CDLLNode:
     """ Node for our CDLL
 
     Requires a timestamp and tweet
     """
-    def __init__(self, time = "", tweet = "", next_node = None, prev_node = None):
+
+    def __init__(self, time="", tweet="", next_node=None, prev_node=None):
         """
         Constructor
 
@@ -22,6 +24,7 @@ class CDLLNode:
         self.next_node: CDLLNode = next_node
         self.prev_node: CDLLNode = prev_node
 
+
 # Linked List
 class CDLL:
     """
@@ -31,6 +34,7 @@ class CDLL:
 
     The head and tail point to each other
     """
+
     def __init__(self):
         """
         Constructor
@@ -53,31 +57,21 @@ class CDLL:
         Otherwise, adds the node at 'current.prev'
         """
         # if empty list
-        if not self.head:
+        if self.head == None:
             # make a new node, and point head and current to it
             self.head = self.current = CDLLNode(time, tweet)
             # make the next and prev values the node itself
             self.head.next_node = self.head.prev_node = self.head
         else:
-            # make a new node
             nnode = CDLLNode(time, tweet)
             # point node before current to this node, and back
+            # make a new node
             nnode.prev_node = self.current.prev_node
-            self.current.prev_node.next_node = nnode
-            # point current to this node, and back
             nnode.next_node = self.current
+            self.current.prev_node.next_node = nnode
             self.current.prev_node = nnode
-            # if we went through the entire list
-            if self.current is self.head:
-                # check for prepending the node
-                prep = self.time_check(time)
-                # if we need to prepend it
-                if prep:
-                    # update head
-                    self.head = nnode
-            # set current to the newly created node
-            self.current = nnode
-
+            if time < self.head.time:
+                self.head = self.current = nnode
         # increase the number of nodes we have
         self.numnodes += 1
 
@@ -126,36 +120,15 @@ class CDLL:
         print(self.current.time)
         print(self.current.tweet)
 
-    def time_check(self, time: str)->bool:
-        """Compare the time of the current node against the passed time"""
-        if self.head == None:
-            return True
-        # x iterates through Hours, Minutes, Seconds
-        for x in range(3):
-            # If current x is more than the passed one
-            if int(self.current.time[3*x:(3*x)+2]) > int(time[3*x:(3*x)+2]):
-                # Prepend the tweet
-                return True
-            # If the current x is less than the passed one
-            elif int(self.current.time[3*x:(3*x)+2]) < int(time[3*x:(3*x)+2]):
-                # leave, check the next tweet
-                return False
-            # arbitrarily prepend if all values equal
-            elif x == 2:
-                return True
-            # if current x is equal, try next x
-            else:
-                continue
-
-def myParser(sentence: str)->tuple:
+def myParser(sentence: str) -> tuple:
     """
-    Takes a sentence to parse, 
+    Takes a sentence to parse,
     returns the parsed elements in a tuple as (time, tweet)
     """
     # splits into 3 parts, based on '|'
     parse = sentence.split('|')
     # the third section becomes the tweet
-    tdata = parse[2]
+    tdata = parse[2].strip()
     # split the time/date substring based on spaces
     parse = parse[1].split(' ')
     # the fourth part is the time
@@ -163,27 +136,33 @@ def myParser(sentence: str)->tuple:
     # append these into our Linked List
     return (ttime, tdata)
 
+
 def populateList(LList: CDLL, filedat):
     # having tweetdata as a variable, parse it
     # and add it to the linked list
     for x in filedat:
         # parse for the time and tweet
         time, tweet = myParser(x)
-        LList.go_first()
-        # traverse the list, insert if you find a place
-        for y in range(LList.numnodes):
-            toInsert = LList.time_check(time)
-            if toInsert:
-                LList.insert(time, tweet)
-                break
+        # if empty list, enter node at head, then continue
+        if LList.numnodes == 0:
+            LList.insert(time, tweet)
+            continue
+        else:
+            LList.go_first()
+            # traverse the list, insert if you find a place
+            # makes use of python's "For Else" conditional
+            for y in range(LList.numnodes):
+                if time < LList.current.time:
+                    LList.insert(time, tweet)
+                    break
+                else:
+                    LList.go_next()
+            # if you go through the entire list, insert it as the tail
             else:
-                LList.go_next()
-        # if you go through the entire list, insert it as the tail
-        else:   
-            LList.insert(time,tweet)
-        #LList.print_all()
+                LList.insert(time, tweet)
 
-def userinloop(LList: CDLL)->None:
+
+def userinloop(LList: CDLL) -> None:
     """Event Loop
 
     Input:
@@ -196,20 +175,25 @@ def userinloop(LList: CDLL)->None:
 
     `l`: prints the last tweet (most recent) to the stdout
 
+    `num`: prints the number of nodes in the list to the stdout
+
     `<number>`: skips tweets circularly and prints the current to the stdout
 
     `s <word>`: searches for the next occurrence of the substring word in the following tweets (search is case insensitive and performs a circular traversal in the list)
 
     `q`: quits the program
     """
-    # get the users command, and enter a loop with it
-    usercom = input()
+    # declares usercom
+    usercom = ""
     # if user input is 'q', leave the event loop
     while usercom != 'q':
+        # gets input for which command to do
+        usercom = input()
         # if 'n', print the next tweet
         if usercom == 'n':
             LList.go_next()
             LList.print_current()
+
         # if 'p', print the previous tweet
         elif usercom == 'p':
             LList.go_prev()
@@ -222,38 +206,30 @@ def userinloop(LList: CDLL)->None:
         elif usercom == 'l':
             LList.go_last()
             LList.print_current()
+        #if 'num', print the number of nodes
+        elif usercom == 'num':
+            print(LList.numnodes)
         # if they're trying to search for a word
         elif usercom[0] == 's':
+            # start at the next node (next occurrence)
+            LList.go_next()
             # strip the 's' and 'space'
             pusercom = usercom.split("s")
-            usercom = pusercom[1].strip()
-            # if they didn't put a value after 's',
-            # no need to search
-            if (usercom == ""):
-                search = False
-                print("You must enter a value after 's' to search.")
+            usercom = pusercom[1].strip().lower()
+            # loop for all the nodes, print if you find it
+            # make sure to convert the node data as lowercase
+            for x in range(LList.numnodes):
+                # check for the search term within the tweet
+                if usercom in LList.current.tweet.lower():
+                    # print the current tweet
+                    LList.print_current()
+                    break
+                # if not there, go to the next tweet
+                else:
+                    LList.go_next()
+            # if we loop all the way through, didn't find the word
             else:
-                search = True
-            # if we need to search
-            if search:
-                usercom = usercom.lower()
-                # loop for all the nodes, print if you find it
-                # make sure to convert the node data as lowercase
-                found_word = False
-                for x in range(LList.numnodes):
-                    test = LList.current.tweet.lower()
-                    # check for the search term within the tweet
-                    if (usercom in test):
-                        # print the current tweet
-                        LList.print_current()
-                        found_word = True
-                        break
-                    # if not there, go to the next tweet
-                    else:
-                        LList.go_next()
-                # if we loop all the way through, didn't find the word
-                if not found_word:
-                    print("Word not found")
+                print("Word not found")
         # else input might be a number to skip ahead to
         else:
             # see if the input is actually a number
@@ -264,25 +240,27 @@ def userinloop(LList: CDLL)->None:
                 LList.print_current()
             # if not a number, account for error
             except ValueError:
-                print("Please enter a valid command")
-        # get new user input
-        usercom = input()
-    
+                if usercom == 'q':
+                    continue
+                else:
+                    print("Please enter a valid command")
     # go back to main
     return
+
 
 def main():
     try:
         sys.argv[1]
     except IndexError:
         print("File Not Passed")
-        return 1
+        return
     # make sure we can actually open the passed filename
     with open(sys.argv[1],'r') as f:
         tweetdata = f.readlines()
 
     # make linked list
     TweetLL = CDLL()
+
     # populate the Linked List with the tweet data
     populateList(TweetLL, tweetdata)
 
@@ -297,6 +275,97 @@ def main():
 
     # done
     return
+
+
+
+class TestLinkedList(unittest.TestCase):
+    """
+    30 Points
+    """
+    """
+    def test_eval_prepend(self):
+        llpre = CDLL()
+        for i in range(3,0,-1):
+            llpre.prepend("",str(i))
+        sout = []
+        for i in range(3,0,-1):
+            sout.append(llpre.current.tweet)
+            llpre.go_next()
+        self.assertListEqual(sout,["1", "2", "3"])
+
+    def test_eval_append(self):
+        llapp = CDLL()
+        for i in range(0,10):
+            llapp.append(str(i),"")
+        sout = []
+        for i in range(0, 10):
+            sout.append(llapp.current.time)
+            llapp.go_next()
+        self.assertListEqual(sout,["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
+
+    def test_eval_go_next(self):
+        llgn = CDLL()
+        for i in range(2):
+            llgn.append("",str(i))
+        self.assertEqual(llgn.current.tweet, "0")
+        llgn.go_next()
+        self.assertEqual(llgn.current.tweet, "1")
+
+    def test_eval_go_prev(self):
+        llgp = CDLL()
+        for i in range(5):
+            llgp.prepend(str(i),"")
+        self.assertEqual(llgp.current.time, "4")
+        llgp.go_prev()
+        self.assertEqual(llgp.current.time, "0")
+
+    def test_eval_go_first(self):
+        llgf = CDLL()
+        for i in range(20):
+            llgf.append(str(i),"")
+        for i in range(10):
+            llgf.go_next()
+        self.assertEqual(llgf.current.time, "10")
+        llgf.go_first()
+        self.assertEqual(llgf.current.time, "0")
+
+    def test_eval_go_last(self):
+        llgl = CDLL()
+        for i in range(50):
+            llgl.prepend("",str(i))
+        for i in range(27):
+            llgl.go_prev()
+        self.assertEqual(llgl.current.tweet, "26")
+        llgl.go_last()
+        self.assertEqual(llgl.current.tweet, "0")
+
+    def test_eval_skip(self):
+        lls = CDLL()
+        for i in range(40):
+            if i%3 == 0:
+                lls.append("Hello","")
+            elif i%3 == 1:
+                lls.append("There","")
+            else:
+                lls.append("Again","")
+        self.assertEqual(lls.current.time, "Hello")
+        lls.skip(50)
+        self.assertEqual(lls.current.time, "There")
+
+    def test_eval_print_cur(self):
+        llpc = CDLL()
+        studout = io.StringIO()
+        origout = sys.stdout
+
+        llpc.append("This Is","The Test")
+
+        sys.stdout = studout
+        llpc.print_current()
+
+        self.assertEqual(studout.getvalue(),"This Is\nThe Test\n")
+        sys.stdout = origout
+    """
+
 
 if __name__ == "__main__":
     main()
