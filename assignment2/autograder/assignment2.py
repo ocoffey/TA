@@ -152,7 +152,7 @@ def populateList(LList: CDLL, filedat):
             # traverse the list, insert if you find a place
             # makes use of python's "For Else" conditional
             for y in range(LList.numnodes):
-                if time < LList.current.time:
+                if time <= LList.current.time:
                     LList.insert(time, tweet)
                     break
                 else:
