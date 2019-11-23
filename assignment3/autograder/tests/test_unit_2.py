@@ -16,7 +16,7 @@ class TestDict(unittest.TestCase):
 
     @weight(40)
     def test_outputs(self):
-        """Function call to actually run the test"""
+        """Testing that student outputs match correct outputs"""
         # runs the students file, passing a .txt file
         studp = subprocess.run(['python3', 'assignment3.py', self.test, self.ourdict], stdout=subprocess.PIPE, encoding='ascii')
         # runs our file, passing the same .txt file
@@ -28,13 +28,16 @@ class TestDict(unittest.TestCase):
         # Make sure that both returned 0
         if studp.returncode == testp.returncode and testp.returncode == 0:
             # count the words and compare counts
-            self.assertEqual(Counter(studOutList),Counter(testOutList))
+            try:
+                self.assertEqual(Counter(studOutList),Counter(testOutList))
+            except AssertionError:
+                assert False, "Word Count Not Equal"
         # Let me know if I made an error
         elif testp.returncode != 0:
-            print("I made an error")
+            print("We made an error")
             print(self.test + " was the book passed.")
             print(self.ourdict + " was the dictionary passed.")
             self.assertTrue(False)
         # If the student didn't return 0
         else:
-            self.assertTrue(False)
+            assert False, "Your Assignment Returned Error Code: " + str(studp.returncode)

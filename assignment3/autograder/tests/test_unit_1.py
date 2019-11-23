@@ -16,7 +16,10 @@ class TestHashTable(unittest.TestCase):
         """Make hash table with 100 entries,
         and make sure that it has than many"""
         myHashTable = HashTable(100)
-        self.assertEqual(len(myHashTable), 100)
+        try:
+            self.assertEqual(len(myHashTable), 100)
+        except AssertionError:
+            assert False, "Hash Table Not The Size Given"
 
     @weight(15)
     def test_hash_range(self):
@@ -25,17 +28,14 @@ class TestHashTable(unittest.TestCase):
         of the hash table
         """
         myHashTable = HashTable(50)
-        myEntries = []
-        for x in range(2000):
-            temp = ""
-            for y in range(10):
-                # make a random letter between 'a' and 'z'
-                myLet = random.randrange(ord('a'), ord('z'))
-                temp = temp + chr(myLet)
-            myEntries.append(temp)
+        with open('tests/hashsize.txt','r') as file:
+            myEntries = file.readlines()
         for entry in myEntries:
-            self.assertTrue(myHashTable.make_hash(entry) < 50)
-    
+            try:
+                self.assertTrue(myHashTable.make_hash(entry) < 50)
+            except AssertionError:
+                assert False, "Hash Larger Than Size Of Table"
+
     @weight(30)
     def test_insert_lookup(self):
         myHashTable = HashTable(200)
@@ -44,4 +44,7 @@ class TestHashTable(unittest.TestCase):
             myHashTable.insert(word)
         tests = {"hello": True, "not": False, "hey": True, "one": False}
         for test in tests:
-            self.assertEqual(myHashTable.lookup(test), tests[test])
+            try:
+                self.assertEqual(myHashTable.lookup(test), tests[test])
+            except AssertionError:
+                assert False, "Key In Hashtable Mismatch"
