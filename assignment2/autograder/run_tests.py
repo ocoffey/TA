@@ -3,5 +3,5 @@ from gradescope_utils.autograder_utils.json_test_runner import JSONTestRunner
 
 if __name__ == '__main__':
     suite = unittest.defaultTestLoader.discover('tests')
-    JSONTestRunner(visibility='after_due_date').run(suite)
+    JSONTestRunner(visibility='visible').run(suite)
 
