@@ -71,16 +71,18 @@ def main():
     myHashTable = HashTable(len(mydict))
 
     # insert all dictionary elements into our hash table
-    for word in mydict:
-        myHashTable.insert(word)
+    for term in mydict:
+        myHashTable.insert(term.lower())
     
     for line in story:
-        # substitutes any non alphanumeric or ' character with empty space
-        # (effectively deleting them)
-        # then splits that trimmed line into separate words
-        line = re.sub(r"([^a-zA-Z0-9'])", r"", line).split()
+        # splits that trimmed line into separate words
+        line = line.lower().split()
         # looks up each word in the hashtable
         # and prints if they're not there
         for word in line:
+            word = re.sub(r"([^a-z0-9'])", r"", word)
             if not myHashTable.lookup(word):
                 print(word)
+
+if __name__ == "__main__":
+    main()
