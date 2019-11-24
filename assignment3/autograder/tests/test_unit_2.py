@@ -16,20 +16,19 @@ class TestDict(unittest.TestCase):
 
     @weight(40)
     def test_outputs(self):
-        """Testing that student outputs match correct outputs"""
         # runs the students file, passing a .txt file
         studp = subprocess.run(['python3', 'assignment3.py', self.test, self.ourdict], stdout=subprocess.PIPE, encoding='ascii')
         # runs our file, passing the same .txt file
         testp = subprocess.run(['python3', self.testpy, self.test, self.ourdict], stdout=subprocess.PIPE, encoding='ascii')
-        # strips students stdout of all whitespace
+        # splits student stdout on newline
         studOutList = studp.stdout.split('\n')
-        # strips our stdout of all whitespace
+        # splits our stdout on newline
         testOutList = testp.stdout.split('\n')
         # Make sure that both returned 0
         if studp.returncode == testp.returncode and testp.returncode == 0:
             # count the words and compare counts
             try:
-                self.assertEqual(Counter(studOutList),Counter(testOutList))
+                self.assertListEqual(Counter(studOutList).most_common(),Counter(testOutList).most_common())
             except AssertionError:
                 assert False, "Word Count Not Equal"
         # Let me know if I made an error

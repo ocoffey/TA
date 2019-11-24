@@ -13,20 +13,14 @@ class TestHashTable(unittest.TestCase):
 
     @weight(15)
     def test_table_size(self):
-        """Make hash table with 100 entries,
-        and make sure that it has than many"""
         myHashTable = HashTable(100)
         try:
-            self.assertEqual(len(myHashTable), 100)
+            self.assertEqual(myHashTable.size, 100)
         except AssertionError:
             assert False, "Hash Table Not The Size Given"
 
     @weight(15)
     def test_hash_range(self):
-        """Make sure that the hashing function doesn't
-        output a number larger than the size
-        of the hash table
-        """
         myHashTable = HashTable(50)
         with open('tests/hashsize.txt','r') as file:
             myEntries = file.readlines()
