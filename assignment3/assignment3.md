@@ -59,29 +59,36 @@ class HashTable:
         """
 
 ```
-**You must use this class to create your hash table. DO NOT use a python dictionary**
 
+**You must use this class to create your hash table.**
 
 ## Spell Check
 
-Once you have downloaded the books, the dictionary, and implemented the `HashTable` class read all of the words in the **dictionary** provided into a hash-table as an unordered set.
+Once you have downloaded the books, the dictionary, and implemented the `HashTable` class, read all of the words from the **dictionary** provided into your hash-table. At this stage, the hash table is an unordered set.
 
-Basically an unordered set is an associative container that contains a set of unique objects of type Key. Search, insertion, and removal can then be done on average in constant-time complexity. Internally, the elements of an unordered set are are not sorted in any particular order, but organized into buckets (hence hash-table). Which bucket an element is placed into depends entirely on the hash of its value. This allows fast access to individual elements, since once a hash is computed, it refers to the exact bucket the element is placed into.
+>An unordered set is an associative container that contains a set of unique objects of type Key. Search, insertion, and removal can then be done on average in constant-time complexity. Internally, the elements of an unordered set are are not sorted in any particular order, but organized into buckets (hence hash-table). Which bucket an element is placed into depends entirely on the hash of its value. This allows fast access to individual elements, since once a hash is computed, it refers to the exact bucket the element is placed into.
 
-Once you have loaded the dictionary, open each book, clean up the text of the books by removing non-alphanumeric values which aren't astrophobes('). Then you should compare each of the words in the book with the words in the dictionary. Print out each word which is NOT in the dictionary but is in the book.
+Once you have loaded the dictionary, open a book (passed as a command line argument), and clean up the text by removing non-alphanumeric values (but retaining any apostrophe's). Then, you should lookup each of the words in the book with the words in the dictionary. Print out each word which is NOT in the dictionary, but is in the book.
 
-#### Note: 
+#### Note
 
-* **PLEASE USE the exact method definitions as given for each question.** If you do not, then the autograder on Gradescope will not be able to recognize your answer and will give you a zero.
-* The hash table for unordered sets has to be implemented by you. You canot use the in-built collections/libraries provided by Python for this purpose
+* **USE the exact method definitions as given for each question.** If you do not, then the autograder on Gradescope will not be able to recognize your answer, and will give you a zero.
+* The hash table has to be implemented by you. You canot use the built-in collections/libraries provided by Python for this purpose.
+  * **_If you are found to have used a built-in collection or library for the hash table, you will receive 0 points for this assignment_**
 
-## Point Distrubtion:
-The sections below show the distribution of points for the assignment:
+## Point Distribution
 
-|**Hash Table Methods** |**60 Points Total**|
-|      ---        |       ---         |
-|**Spell Checker**|**40 Points Total**|
+The sections below shows the distribution of points for the assignment:
 
+| Class Method | Points|
+| ---    | ---   |
+| `make_table()`| 15 points|
+| `make_hash()` | 15 points|
+| `insert()` and `lookup()` | 30 points|
+
+|Spell Checker | Points|
+| --- | --- |
+|Correct Output | 40 points|
 
 ## SUBMISSION
 
@@ -93,7 +100,7 @@ Please provide meaningful comments and use proper coding style and indentation. 
 
 Your program will be automatically graded. For each of the aforementioned tests you either pass the test case (full points) or not (zero points).
 
-**Remember, we can test with any .txt file in the Dataset.**
+>We can test with any .txt file in the Dataset.
 
 Students caught cheating or plagiarizing will receive no credit. Additional actions, including a failing grade in the class or referring the case for disciplinary action, may also be taken.
 
@@ -103,4 +110,4 @@ Late submissions will receive a ZERO.
 
 ***
 
-## **Your Gradescope submissions will not show how many points you have until after the due date has passed. It is on you to follow the requirements for each section, and to come up with your own thorough test cases that make sure that each part is complete and correct. You are allowed _unlimited_ resubmissions until the due date.**
+## **Similar to assignment 1, Gradescope will tell you your score everytime you submit. You are allowed _unlimited_ resubmissions  on Gradescope until the due date.**
