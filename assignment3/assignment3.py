@@ -80,6 +80,9 @@ def main():
         # looks up each word in the hashtable
         # and prints if they're not there
         for word in line:
+            # correct the apostrophe
+            word = re.sub(r"([’])", r"(['])", word)
+            # replaces unwanted characters
             word = re.sub(r"([^a-z0-9'])", r"", word)
             if not myHashTable.lookup(word):
                 print(word)

@@ -42,6 +42,8 @@ def main():
         line = line.lower().split()
         # see if each word is in the dict
         for word in line:
+            # correct the apostrophe
+            word = re.sub(r"([’])", r"(['])", word)
             # remove junk chars in the word
             word = re.sub(r"([^a-z0-9'])", r"", word)
             if word not in userdict:
