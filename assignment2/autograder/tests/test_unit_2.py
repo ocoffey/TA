@@ -10,6 +10,7 @@ class TestTweetReader(unittest.TestCase):
     def setUp(self):
         self.test = 'tests/nprhealth.txt'
         self.testpy = 'tests/testassignment2.py'
+        self.testpy2 = 'tests/testassignment2post.py'
 
     def sub_func(self, stinput: str) -> bool:
         """Function call to actually run the test"""
@@ -17,24 +18,33 @@ class TestTweetReader(unittest.TestCase):
         studp = subprocess.run(['python3', 'assignment2.py', self.test], stdout=subprocess.PIPE, input=stinput, encoding='ascii')
         # runs our file, passing the same .txt file
         testp = subprocess.run(['python3', self.testpy, self.test], stdout=subprocess.PIPE, input=stinput, encoding='ascii')
+        # runs file with pre insertion for equal nodes
+        testpostp = subprocess.run(['python3', self.testpy2, self.test], stdout=subprocess.PIPE, input=stinput, encoding='ascii')
         # strips students stdout of all whitespace
         studstripped = re.sub(r"([\s\t\n])", r"", studp.stdout.strip())
         # strips our stdout of all whitespace
         teststripped = re.sub(r"([\s\t\n])", r"", testp.stdout.strip())
+        # strips post insert stdout
+        testpoststripped = re.sub(r"([\s\t\n])", r"", testpostp.stdout.strip())
         # Make sure that both returned 0
-        if studp.returncode == testp.returncode and testp.returncode == 0:
+        if studp.returncode == testp.returncode == testpostp.returncode == 0:
             # compares outputs and returns that bool
-            return studstripped == teststripped
+            return (studstripped == teststripped) or (studstripped == testpoststripped)
         # Let me know if I made an error
         elif testp.returncode != 0:
             print("I made an error")
             print(self.test, end='')
             print(" was the filename passed.")
             return False
+        elif testpostp.returncode != 0:
+            print("I made an error")
+            print(self.test, end='')
+            print(" was the filename passed.")
+            return False
         # If the student didn't return 0
         else:
+            print("Your file returned error code: " + str(studp.returncode))
             return False
-
 
     @weight(2)
     def test_quit(self):
